@@ -18,6 +18,13 @@ const ListItems = ({todos, setTodos}) => {
 
 //style swiped list
 const [swipedRow, setSwipedRow] = useState(null);
+const handleDeleteTodo = (rowMap, rowKey) => {
+    const newTodos = [...todos];
+    const todoIndex = todos.findIndex((todo) => todo.key === rowKey);
+    newTodos.splice(todoIndex, 1);
+    setTodos(newTodos);
+
+}
 
     return (
         <SwipeListView
@@ -25,7 +32,13 @@ const [swipedRow, setSwipedRow] = useState(null);
         renderItem={(data)=>{
             const RowText = data.item.key == swipedRow ? SwipedTodoText : TodoText;
             return(
-                <ListView>
+                <ListView
+                underLayColor={color.primary}
+                onPress= {()=>{
+                    
+                }}
+                
+                >
                     <>
                     <RowText>{data.item.title}</RowText>
                     <TodoDate>{data.item.date}</TodoDate>
@@ -34,9 +47,12 @@ const [swipedRow, setSwipedRow] = useState(null);
             )
 
         }}
-        renderHiddenItem={()=>{
+        renderHiddenItem={(data, rowMap)=>{
             return (<ListViewHidden>
-                <HiddenButton>
+                <HiddenButton
+                onPress = {() => handleDeleteTodo(rowMap, data.item.key)}
+
+                >
                     <Entypo name= "trash" size={25} color={color.secondary}/>
 
                 </HiddenButton>
